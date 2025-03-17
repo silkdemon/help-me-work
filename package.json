@@ -1,0 +1,30 @@
+{
+  "name": "help-me-work",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silkdemon/help-me-work.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silkdemon/help-me-work/issues"
+  },
+  "homepage": "https://github.com/silkdemon/help-me-work#readme",
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "inquirer": "^12.5.0"
+  },
+  "devDependencies": {
+    "@inquirer/prompts": "^7.4.0",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
