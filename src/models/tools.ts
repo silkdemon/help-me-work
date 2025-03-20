@@ -151,7 +151,7 @@ export const toolCategories: ToolCategory[] = [
         name: "Oh-my-zsh",
         value: "oh-my-zsh",
         installCommand:
-          "curl -sSL https://install.python-poetry.org | python3 -",
+          'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"',
       },
       {
         name: "Dbeaver",
