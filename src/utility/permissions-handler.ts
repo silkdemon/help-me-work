@@ -21,10 +21,8 @@ function setupNpmPrefix() {
     execSync(`npm config set prefix ${npmGlobalDir}`);
 
     // Добавление пути в PATH (для текущей сессии)
-    process.env.PATH = `${npmGlobalDir}/bin:${process.env.PATH}`;
-
-    console.log(process.env.PATH);
-    
+    const npmPath = `${npmGlobalDir}/bin:${process.env.PATH}`;
+    process.env.PATH = npmPath;
 
     console.log("Настроен пользовательский npm-префикс!");
   } catch (error: any) {
@@ -62,23 +60,28 @@ export async function handlePermissionError(tool: Tool) {
 
 export function installNvm() {
   try {
-    console.log('Устанавливаем nvm...');
+    console.log("Устанавливаем nvm...");
     execSync(
-      'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && ' +
-      'source $HOME/.nvm/nvm.sh && ' +
-      'nvm install --lts && ' +
-      'nvm use --lts', 
+      `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && 
+      unset npm_config_prefix && 
+      source $HOME/.nvm/nvm.sh && 
+      nvm install --lts && 
+      nvm use --lts`,
       {
-        shell: '/bin/bash',
-        stdio: 'inherit',
-        env: { ...process.env, SHELL: '/bin/bash' }
+        shell: "/bin/bash",
+        stdio: "inherit",
+        env: {
+          ...process.env,
+          SHELL: "/bin/bash",
+          npm_config_prefix: undefined,
+        },
       }
     );
-    console.log('✅ Успешно! Закройте и перезапустите терминал.');
+    console.log("✅ Успешно! Закройте и перезапустите терминал.");
   } catch (error: any) {
-    console.error('❌ Ошибка:', error.message);
-    console.log('Попробуйте вручную:');
-    console.log('1. source ~/.bashrc (или ~/.zshrc)');
-    console.log('2. Повторите команду');
+    console.error("❌ Ошибка:", error.message);
+    console.log("Попробуйте вручную:");
+    console.log("1. source ~/.bashrc (или ~/.zshrc)");
+    console.log("2. Повторите команду");
   }
 }

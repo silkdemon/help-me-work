@@ -18,7 +18,6 @@ export const toolCategories: ToolCategory[] = [
         value: "vue-cli",
         installCommand: "npm install -g @vue/cli",
       },
-      // Другие frontend инструменты
     ],
   },
   {
@@ -36,7 +35,6 @@ export const toolCategories: ToolCategory[] = [
         value: "gradle",
         installCommand: "brew install gradle",
       },
-      // Другие Java инструменты
     ],
   },
   {
@@ -49,7 +47,6 @@ export const toolCategories: ToolCategory[] = [
         value: "delve",
         installCommand: "brew install delve",
       },
-      // Другие Go инструменты
     ],
   },
   {
@@ -69,10 +66,98 @@ export const toolCategories: ToolCategory[] = [
       {
         name: "Poetry",
         value: "poetry",
+        installCommand: "brew install poetry",
+      },
+    ],
+  },
+  {
+    name: "Devops инструменты",
+    value: "devops",
+    tools: [
+      {
+        name: "Python",
+        value: "python",
+        installCommand: "brew install python",
+      },
+      {
+        name: "Docker",
+        value: "docker",
+        installCommand: "brew install docker",
+      },
+      {
+        name: "Kubectl",
+        value: "kubectl",
+        installCommand: "brew install kubernetes-cli",
+      },
+      {
+        name: "Helm",
+        value: "helm",
+        installCommand: "brew install helm",
+      },
+      {
+        name: "Ansible",
+        value: "ansible",
+        installCommand: "brew install ansible",
+      },
+      {
+        name: "Terraform",
+        value: "terraform",
+        installCommand:
+          "brew tap hashicorp/tap && brew install hashicorp/tap/terraform",
+      },
+      {
+        name: "Podman",
+        value: "podman",
+        installCommand: "brew install podman",
+      },
+    ],
+  },
+  {
+    name: "Qa инструменты",
+    value: "qa",
+    tools: [
+      {
+        name: "Postman",
+        value: "postman",
+        installCommand: "brew install --cask postman",
+      },
+      {
+        name: "Newman",
+        value: "newman",
+        installCommand: "brew install newman",
+      },
+      {
+        name: "Insomnia",
+        value: "insomnia",
+        installCommand: "brew install --cask insomnia",
+      },
+    ],
+  },
+  {
+    name: "Полезные утилиты",
+    value: "utility",
+    tools: [
+      {
+        name: "Maccy",
+        value: "maccy",
+        installCommand: "brew install --cask maccy",
+      },
+      {
+        name: "Iterm2",
+        value: "iterm2",
+        installCommand: "brew install --cask iterm2",
+      },
+      {
+        name: "Oh-my-zsh",
+        value: "oh-my-zsh",
         installCommand:
           "curl -sSL https://install.python-poetry.org | python3 -",
       },
-      // Другие Python инструменты
+      {
+        name: "Dbeaver",
+        value: "dbeaver",
+        installCommand: "brew install --cask dbeaver-community",
+      },
     ],
   },
 ];
