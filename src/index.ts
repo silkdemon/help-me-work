@@ -18,7 +18,6 @@ async function main() {
   console.log("Установщик инструментов разработки для Mac");
 
   // Шаг 0: Проверяем наличие Homebrew
-
   try {
     execSync("which brew", { stdio: "ignore" });
     console.log("✅ Homebrew уже установлен");
@@ -36,7 +35,6 @@ async function main() {
   }
 
   // Шаг 0.5: Скачиваем гит
-
   try {
     execSync("git --version", { stdio: "ignore" });
     console.log("✅ Git уже установлен");
@@ -50,13 +48,13 @@ async function main() {
     }
   }
 
-  // Шаг 1: спрашиваем какую IDE скачать
+  // Шаг 1: Спрашиваем какую IDE скачать
   const ideAnswers = await checkbox({
     message: "Выберите ide для установки:",
     choices: ides,
   });
 
-  // Шаг 2: Выбор категорий инструментов
+  // Шаг 2: Спрашиваем категории инструментов
   const categoryAnswer = await search({
     message: "Выберите категории инструментов для установки:",
     source: () => {
@@ -79,7 +77,7 @@ async function main() {
       }))
     );
 
-  // Шаг 3: Выбор конкретных инструментов из выбранных категорий
+  // Шаг 3: Спрашиваем какие конкретно инструменты из выбранных категорий выбрать
   const toolAnswers = await checkbox({
     message: "Выберите инструменты для установки:",
     choices: toolChoices,
@@ -90,8 +88,10 @@ async function main() {
     return;
   }
 
+  // Создаем список выбранных инструментов и IDE
   const selectedTools = findSelectedTool(toolChoices, toolAnswers);
   const selectedIdes = findSelectedTool(ides, ideAnswers);
+  // Создаем список имен выбранных инструментов и IDE
   const selectedToolNames = findSelectedToolNames(selectedTools);
   const selectedIdeNames = findSelectedToolNames(selectedIdes);
 
@@ -105,14 +105,12 @@ async function main() {
       ? `\n  - ${(selectedIdeNames ?? []).join("\n  - ")}`
       : "";
 
-  // Шаг 5: Установка выбранных инструментов
-  // console.log("Начинаем установку выбранных инструментов...");
-
   const toolsToInstall = [...selectedTools, ...selectedIdes];
 
   let needVersion = false;
   let version = "";
 
+  // Шаг 4: Спрашиваем хотим ли указывать конкретную версию инструмента
   for (const tool of toolsToInstall) {
     if (tool.hasVersion === true) {
       needVersion = await confirm({
@@ -129,7 +127,7 @@ async function main() {
     }
   }
 
-  // Шаг 4: Запрос подтверждения установки
+  // Шаг 5: Запрос подтверждения установки
   const confirmAnswer = await confirm({
     message: `Вы уверены, что хотите установить выбранные инструменты: ${toolsText}${idesText}?`,
     transformer: (answer) => (answer ? "Да" : "Нет"),
@@ -143,6 +141,7 @@ async function main() {
     return;
   }
 
+  // Шаг 6: Установка выбранных инструментов
   for (const tool of toolsToInstall) {
     console.log(`\nУстановка ${tool.name}...`);
 

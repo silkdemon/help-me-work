@@ -25,6 +25,7 @@
     "@inquirer/prompts": "^7.4.0",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^22.13.10",
+    "pkg": "^5.8.1",
     "typescript": "^5.8.2"
   }
 }
