@@ -8,4 +8,5 @@ interface ToolCategory {
     name: string;
     value: string;
     installCommand: string;
+    hasVersion: boolean
   }

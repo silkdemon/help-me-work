@@ -8,6 +8,7 @@ import {
   confirm,
   Separator,
   select,
+  input,
 } from "@inquirer/prompts";
 import { toolCategories } from "./models/tools";
 import { log } from "console";
@@ -19,6 +20,7 @@ import {
   installNvm,
 } from "./utility/permissions-handler";
 import { ides } from "./models/ides";
+import chalk from "chalk";
 
 const findSelectedTool = (tools: Tool[], selectedTools: string[]): Tool[] => {
   return tools.filter((tool) => selectedTools.includes(tool.value));
@@ -87,6 +89,7 @@ async function main() {
         name: tool.name,
         value: tool.value,
         installCommand: tool.installCommand,
+        hasVersion: tool.hasVersion,
       }))
     );
 
@@ -116,9 +119,34 @@ async function main() {
       ? `\n  - ${(selectedIdeNames ?? []).join("\n  - ")}`
       : "";
 
+  // Шаг 5: Установка выбранных инструментов
+  // console.log("Начинаем установку выбранных инструментов...");
+
+  const toolsToInstall = [...selectedTools, ...selectedIdes];
+
+  let needVersion = false;
+  let version = "";
+
+  for (const tool of toolsToInstall) {
+    if (tool.hasVersion === true) {
+      needVersion = await confirm({
+        message: `Вы выбрали инструмент, для которого доступно версионирование - ${tool.name}, вам нужна НЕ latest версия?`,
+        default: false,
+        transformer: (answer) => (answer ? "Да" : "Нет"),
+      });
+    }
+
+    if (needVersion && tool.hasVersion) {
+      version = await input({
+        message: `Введите версию для установки ${tool.name}:`,
+      });
+    }
+  }
+
   // Шаг 4: Запрос подтверждения установки
   const confirmAnswer = await confirm({
     message: `Вы уверены, что хотите установить выбранные инструменты: ${toolsText}${idesText}?`,
+    transformer: (answer) => (answer ? "Да" : "Нет"),
   });
 
   if (confirmAnswer) {
@@ -127,42 +155,33 @@ async function main() {
     return;
   }
 
-  // Шаг 5: Установка выбранных инструментов
-  console.log("Начинаем установку выбранных инструментов...");
-
-  const toolsToInstall = [...selectedTools, ...selectedIdes];
-  console.log(toolsToInstall);
-
   for (const tool of toolsToInstall) {
     console.log(`\nУстановка ${tool.name}...`);
-
-    // Проверка для npm
-    if (categoryAnswer === "frontend") {
-      if (!(await checkPermissions("/usr/local/lib/node_modules"))) {
-        console.error("Недостаточно прав для установки npm-пакетов!");
-      }
-    }
 
     if (tool.value === "npm") {
       installNvm();
     } else {
       try {
-        execSync(tool.installCommand);
-        console.log(`✅ ${tool.name} установлен успешно`);
+        if (needVersion && tool.hasVersion === true) {
+          execSync(`${tool.installCommand}@${version}`);
+          console.log(chalk.green(`✅ ${tool.name} установлен успешно`));
+        } else {
+          execSync(tool.installCommand);
+          console.log(chalk.green(`✅ ${tool.name} установлен успешно`));
+        }
       } catch (error) {
-        console.error(`❌ Ошибка при установке ${tool.name}:`);
-        console.error(error);
+        console.error(chalk.red(`❌ Ошибка при установке ${tool.name}:`));
+        console.error(chalk.yellow(error));
       }
     }
-
-    console.log("\n🎉 Установка завершена!");
-
   }
+
+  console.log(chalk.green("\n🎉 Установка завершена!"));
 }
 
 main();
 
-// 1) Разборать корректно ли работает блок фронденда
-// 2) Кейс: выбрана иде и выбрана категория фронтенд, но не выбраны инструменты в этой категории
+// проверить для гита и хомбрю
 // 3) Упаковка все в исполняемый файл
-// 4) Добавить версионирование ЯП
+// хендлинг комманд+с
+// проверка как работает installNvm
