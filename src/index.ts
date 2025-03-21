@@ -1,26 +1,10 @@
 #!/usr/bin/env node
-import inquirer from "inquirer";
-import { exec, execSync } from "child_process";
-import { promisify } from "util";
-import {
-  checkbox,
-  search,
-  confirm,
-  Separator,
-  select,
-  input,
-} from "@inquirer/prompts";
-import { toolCategories } from "./models/tools";
-import { log } from "console";
-import fs from "fs/promises";
-import { PathLike } from "fs";
-import {
-  checkPermissions,
-  handlePermissionError,
-  installNvm,
-} from "./utility/permissions-handler";
-import { ides } from "./models/ides";
+import { checkbox, confirm, input, search } from "@inquirer/prompts";
 import chalk from "chalk";
+import { execSync } from "child_process";
+import { ides } from "./models/ides";
+import { toolCategories } from "./models/tools";
+import { installNvm } from "./utility/permissions-handler";
 
 const findSelectedTool = (tools: Tool[], selectedTools: string[]): Tool[] => {
   return tools.filter((tool) => selectedTools.includes(tool.value));
@@ -44,7 +28,8 @@ async function main() {
     } catch (error) {
       console.log("📦 Установка Homebrew...");
       execSync(
-        '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+        '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
+        { stdio: "inherit" }
       );
     }
   }
@@ -151,7 +136,9 @@ async function main() {
 
   if (confirmAnswer) {
   } else {
-    console.log("Не выбрано ни одного инструмента для установки.");
+    console.log(
+      chalk.yellow("Не выбрано ни одного инструмента для установки.")
+    );
     return;
   }
 
@@ -164,10 +151,10 @@ async function main() {
       try {
         if (needVersion && tool.hasVersion === true) {
           execSync(`${tool.installCommand}@${version}`);
-          console.log(chalk.green(`✅ ${tool.name} установлен успешно`));
+          console.log(chalk.bgCyan(`✅ ${tool.name} установлен успешно`));
         } else {
           execSync(tool.installCommand);
-          console.log(chalk.green(`✅ ${tool.name} установлен успешно`));
+          console.log(chalk.bgCyan(`✅ ${tool.name} установлен успешно`));
         }
       } catch (error) {
         console.error(chalk.red(`❌ Ошибка при установке ${tool.name}:`));
@@ -181,7 +168,7 @@ async function main() {
 
 main();
 
-// проверить для гита и хомбрю
 // 3) Упаковка все в исполняемый файл
 // хендлинг комманд+с
 // проверка как работает installNvm
+// не спрашивать про гит если скачан
