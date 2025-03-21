@@ -18,14 +18,15 @@ async function main() {
   console.log("Установщик инструментов разработки для Mac");
 
   // Шаг 0: Проверяем наличие Homebrew
-  const isInstallBrew = await confirm({
-    message: `Установить Homebrew?`,
-  });
-  if (isInstallBrew) {
-    try {
-      execSync("which brew", { stdio: "ignore" });
-      console.log("✅ Homebrew уже установлен");
-    } catch (error) {
+
+  try {
+    execSync("which brew", { stdio: "ignore" });
+    console.log("✅ Homebrew уже установлен");
+  } catch (error) {
+    const isInstallBrew = await confirm({
+      message: `Установить Homebrew?`,
+    });
+    if (isInstallBrew) {
       console.log("📦 Установка Homebrew...");
       execSync(
         '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
@@ -35,15 +36,15 @@ async function main() {
   }
 
   // Шаг 0.5: Скачиваем гит
-  const isInstallGit = await confirm({
-    message: `Установить Git?`,
-  });
 
-  if (isInstallGit) {
-    try {
-      execSync("git --version", { stdio: "ignore" });
-      console.log("✅ Git уже установлен");
-    } catch (error) {
+  try {
+    execSync("git --version", { stdio: "ignore" });
+    console.log("✅ Git уже установлен");
+  } catch (error) {
+    const isInstallGit = await confirm({
+      message: `Установить Git?`,
+    });
+    if (isInstallGit) {
       console.log("📦 Установка Git...");
       execSync("brew install git");
     }
