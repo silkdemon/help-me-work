@@ -124,7 +124,7 @@ export const toolCategories: ToolCategory[] = [
       {
         name: "Ansible",
         value: "ansible",
-        installCommand: "brew install ansible",
+        installCommand: "pip3 install --user ansible",
         hasVersion: false,
       },
       {

@@ -2,9 +2,27 @@
   "name": "help-me-work",
   "version": "1.0.0",
   "main": "./dist/index.js",
+  "bin": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "package": "pkg . --out-path=build"
+  },
+  "pkg": {
+    "scripts": [
+      "dist/**/*.js"
+    ],
+    "assets": [
+      "package.json",
+      "README.md",
+      "node_modules/chalk/**/*"
+    ],
+    "options": {
+      "no-bytecode": true
+    },
+    "targets": [
+      "node18-macos-x64"
+    ]
   },
   "repository": {
     "type": "git",
@@ -18,7 +36,7 @@
   "homepage": "https://github.com/silkdemon/help-me-work#readme",
   "description": "",
   "dependencies": {
-    "chalk": "^5.4.1",
+    "chalk": "^4.1.2",
     "inquirer": "^12.5.0"
   },
   "devDependencies": {
