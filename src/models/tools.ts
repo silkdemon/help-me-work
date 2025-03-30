@@ -131,7 +131,7 @@ export const toolCategories: ToolCategory[] = [
         name: "Terraform",
         value: "terraform",
         installCommand:
-          "brew tap hashicorp/tap && brew install hashicorp/tap/terraform",
+          "brew untap hashicorp/tap && brew tap hashicorp/tap && brew install hashicorp/tap/terraform",
         hasVersion: false,
       },
       {

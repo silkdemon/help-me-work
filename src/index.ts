@@ -6,6 +6,7 @@ import { ides } from "./models/ides";
 import { toolCategories } from "./models/tools";
 import { installNvm } from "./utility/permissions-handler";
 
+
 const findSelectedTool = (tools: Tool[], selectedTools: string[]): Tool[] => {
   return tools.filter((tool) => selectedTools.includes(tool.value));
 };
@@ -15,12 +16,26 @@ const findSelectedToolNames = (tools: Tool[]): string[] => {
 };
 
 async function main() {
+  // Хендлинг cmd+c
+  process.on('uncaughtException', (error) => {
+    if (error instanceof Error && error.name === 'ExitPromptError') {
+      console.log('👋 До скорых встреч!');
+    } else {
+      // Rethrow unknown errors
+      throw error;
+    }
+  });
+
+
   console.log("Установщик инструментов разработки для Mac");
 
   // Шаг 0: Проверяем наличие Homebrew
   try {
     execSync("which brew", { stdio: "ignore" });
     console.log("✅ Homebrew уже установлен");
+    console.log("Обновляем Homebrew...")
+    execSync("brew update")
+    console.log("✅ Homebrew успешно обновлен")
   } catch (error) {
     const isInstallBrew = await confirm({
       message: `Установить Homebrew?`,
@@ -168,6 +183,4 @@ async function main() {
 
 main();
 
-// хендлинг комманд+с
 // проверка как работает installNvm
-// проверить терраформ
